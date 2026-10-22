@@ -215,6 +215,12 @@
   .pl-toggle { display: inline-flex; background: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 4px; pointer-events: auto; }
   .pl-toggle button { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; padding: 8px 16px; border-radius: 999px; transition: background .5s var(--ease), color .5s var(--ease); }
   .pl-toggle button[aria-pressed="true"] { background: var(--black); color: var(--white); }
+  .pl-labels { pointer-events: auto; width: 46px; height: 46px; border-radius: 50%; background: var(--white); border: 1px solid var(--line); display: grid; place-items: center; margin-right: auto; margin-left: -4px; transition: background .5s var(--ease), color .5s var(--ease); }
+  .pl-labels .off { display: none; }
+  .pl-labels[aria-pressed="false"] { background: var(--black); color: var(--white); }
+  .pl-labels[aria-pressed="false"] .on { display: none; }
+  .pl-labels[aria-pressed="false"] .off { display: block; }
+  .stage.labels-off .pl-label { visibility: hidden; }
   .pl-hint { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--gray); display: inline-flex; align-items: center; gap: 8px; transition: opacity .6s var(--ease); }
   .pl-hint svg { animation: sway 2.4s var(--ease) infinite; }
   @keyframes sway { 0%,100% { transform: translateX(-4px); } 50% { transform: translateX(4px); } }
@@ -528,8 +534,8 @@
 
 <nav class="menu" id="menu" aria-hidden="true">
   <ul>
-    <li><a href="#rooms"><span class="mono">01</span>The Room</a></li>
-    <li><a href="#plan"><span class="mono">02</span>Floor Plan</a></li>
+    <li><a href="#plan"><span class="mono">01</span>Floor Plan</a></li>
+    <li><a href="#rooms"><span class="mono">02</span>The Room</a></li>
     <li><a href="#position"><span class="mono">03</span>Unit Position</a></li>
     <li><a href="#storage"><span class="mono">04</span>Storage</a></li>
     <li><a href="#pet"><span class="mono">05</span>Pet Friendly</a></li>
@@ -586,11 +592,40 @@
   </div>
 </section>
 
+<!-- FLOOR PLAN -->
+<section class="plan wrap" id="plan">
+  <div class="s-head">
+    <div>
+      <span class="mono fade">( 01 — Floor Plan )</span>
+      <h2><span class="line"><span>Floor Plan</span></span></h2>
+    </div>
+    <p class="th fade">แปลนห้อง Type A3-1 แบบ 3D — ลากเพื่อหมุนดูรอบห้อง แตะชื่อห้องเพื่อไฮไลต์ตำแหน่ง</p>
+  </div>
+  <div class="stage fade" id="planStage" aria-label="แปลนห้อง 3 มิติ แบบหมุนได้">
+    <div class="pl-ui">
+      <div class="pl-toggle" role="group" aria-label="มุมมอง">
+        <button type="button" data-view="3d" aria-pressed="true">3D</button>
+        <button type="button" data-view="top" aria-pressed="false">Top</button>
+      </div>
+      <button type="button" class="pl-labels" id="plLabels" aria-pressed="true" aria-label="ซ่อนชื่อห้อง" title="ซ่อน / แสดงชื่อห้อง">
+        <svg class="on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h12l4 7-4 7H3z"/><circle cx="8" cy="12" r="1.4" fill="currentColor"/></svg>
+        <svg class="off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h12l4 7-4 7H3z"/><path d="M2 2l20 20"/></svg>
+      </button>
+      <span class="pl-hint" id="plHint"><svg width="28" height="12" viewBox="0 0 28 12" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 6h26M5 2L1 6l4 4M23 2l4 4-4 4"/></svg><span>Drag to rotate</span></span>
+    </div>
+  </div>
+  <ul class="rooms-list fade" id="roomsList"></ul>
+  <div class="plan-foot fade">
+    <p class="th">* สัดส่วนประมาณจากแบบแปลน · ตกแต่งตามสภาพห้องจริง</p>
+    <button type="button" class="btn btn--line" id="openPlan"><span class="th">ดูแปลนต้นฉบับ</span><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 14L14 6M7 6h7v7"/></svg></button>
+  </div>
+</section>
+
 <!-- ROOMS -->
 <section class="gallery wrap" id="rooms">
   <div class="s-head">
     <div>
-      <span class="mono fade">( 01 — The Room )</span>
+      <span class="mono fade">( 02 — The Room )</span>
       <h2><span class="line"><span>The Room</span></span></h2>
     </div>
     <p class="th fade">ภาพถ่ายจากห้องจริงทั้งหมด — แตะที่รูปเพื่อดูภาพใหญ่</p>
@@ -624,31 +659,6 @@
       <div class="img"><span class="arrow"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#000" stroke-width="1"><path d="M6 14L14 6M7 6h7v7"/></svg></span><img src="images/bedroom-2.jpg" alt="ห้องนอนมองไปทาง walk-in closet" loading="lazy" /></div>
       <figcaption class="meta"><h3>Bedroom → Closet</h3><span class="cat th">ห้องนอนเชื่อมต่อ walk-in closet และห้องน้ำ</span><span class="no mono">07</span></figcaption>
     </figure>
-  </div>
-</section>
-
-<!-- FLOOR PLAN -->
-<section class="plan wrap" id="plan">
-  <div class="s-head">
-    <div>
-      <span class="mono fade">( 02 — Floor Plan )</span>
-      <h2><span class="line"><span>Floor Plan</span></span></h2>
-    </div>
-    <p class="th fade">แปลนห้อง Type A3-1 แบบ 3D — ลากเพื่อหมุนดูรอบห้อง แตะชื่อห้องเพื่อไฮไลต์ตำแหน่ง</p>
-  </div>
-  <div class="stage fade" id="planStage" aria-label="แปลนห้อง 3 มิติ แบบหมุนได้">
-    <div class="pl-ui">
-      <div class="pl-toggle" role="group" aria-label="มุมมอง">
-        <button type="button" data-view="3d" aria-pressed="true">3D</button>
-        <button type="button" data-view="top" aria-pressed="false">Top</button>
-      </div>
-      <span class="pl-hint" id="plHint"><svg width="28" height="12" viewBox="0 0 28 12" fill="none" stroke="currentColor" stroke-width="1"><path d="M1 6h26M5 2L1 6l4 4M23 2l4 4-4 4"/></svg><span>Drag to rotate</span></span>
-    </div>
-  </div>
-  <ul class="rooms-list fade" id="roomsList"></ul>
-  <div class="plan-foot fade">
-    <p class="th">* สัดส่วนประมาณจากแบบแปลน · ตกแต่งตามสภาพห้องจริง</p>
-    <button type="button" class="btn btn--line" id="openPlan"><span class="th">ดูแปลนต้นฉบับ</span><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 14L14 6M7 6h7v7"/></svg></button>
   </div>
 </section>
 
@@ -1273,6 +1283,14 @@
       { key: 'kitchen', en: 'Kitchen', th: 'ครัว + โต๊ะทานข้าว', area: '≈ 9 m²',   rect: [3.9, 2.85, 6.75, 6.1],  at: [5.4, 3.35],  photo: 1 },
       { key: 'balcony', en: 'Balcony', th: 'ระเบียง',           area: '≈ 4 m²',   rect: [0, 2.85, 1.22, 6.1],    at: [0.61, 4.4],  photo: null }
     ];
+
+    // Room-name badges on/off
+    $('plLabels').addEventListener('click', e => {
+      const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      b.setAttribute('aria-label', on ? 'ซ่อนชื่อห้อง' : 'แสดงชื่อห้อง');
+      stage.classList.toggle('labels-off', !on);
+    });
 
     // Room list (works even without WebGL)
     const list = $('roomsList');
