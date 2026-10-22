@@ -75,7 +75,8 @@
   .fade.in { opacity: 1; transform: none; }
 
   /* ---------- HEADER ---------- */
-  .header { position: fixed; inset: 0 0 auto 0; z-index: 100; mix-blend-mode: difference; color: var(--white); }
+  .header { position: fixed; inset: 0 0 auto 0; z-index: 100; mix-blend-mode: difference; color: var(--white); transition: transform .6s var(--ease); }
+  .header.hide { transform: translateY(-110%); }
   .header .wrap { display: flex; justify-content: space-between; align-items: center; padding-block: 24px; }
   .logo { font-size: 24px; font-weight: 700; letter-spacing: -0.06em; }
   .menu-btn { width: 44px; height: 44px; display: grid; place-items: center; }
@@ -2004,6 +2005,24 @@
       if (visible) start(); else stop();
     }, { threshold: 0.5 }).observe(sw);
   });
+
+  // Header: hide while scrolling down, show again as soon as the visitor scrolls up
+  (function () {
+    const header = document.querySelector('.header');
+    let lastY = scrollY, ticking = false;
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = scrollY, dy = y - lastY;
+        if (document.body.classList.contains('menu-open') || y < 80) header.classList.remove('hide');
+        else if (dy > 4) header.classList.add('hide');
+        else if (dy < -4) header.classList.remove('hide');
+        if (Math.abs(dy) > 4) lastY = y;
+        ticking = false;
+      });
+    }, { passive: true });
+  })();
 
   // Mobile sticky CTA: show after hero, hide at contact section
   const sticky = $('stickyCta');
