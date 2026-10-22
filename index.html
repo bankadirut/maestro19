@@ -431,7 +431,6 @@
   .ft-bot { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid var(--line-w); font-size: 14px; color: var(--gray-2); }
 
   /* ---------- MOBILE STICKY CTA ---------- */
-  .sticky-cta { display: none; }
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 900px) {
@@ -447,13 +446,6 @@
     .pet-grid, .c-grid { gap: 56px; }
     .ft-grid { grid-template-columns: 1fr 1fr; }
     .ft-grid > div:first-child { grid-column: 1 / -1; }
-    .sticky-cta {
-      display: flex; gap: 8px; position: fixed; left: 20px; right: 20px; bottom: 16px; z-index: 80;
-      transform: translateY(150%); transition: transform .7s var(--ease);
-    }
-    .sticky-cta.show { transform: none; }
-    .sticky-cta a { flex: 1; justify-content: center; padding: 16px; background: var(--black); color: var(--white); border-color: var(--black); box-shadow: 0 10px 30px rgba(0,0,0,.25); }
-    .sticky-cta a.alt { background: var(--white); color: var(--black); }
     .qr { display: none; }
     .pos-grid { grid-template-columns: 1fr; }
     .pos-card:first-child { border-top-left-radius: 60px; }
